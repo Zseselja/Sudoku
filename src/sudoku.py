@@ -4,12 +4,17 @@ import sys
 
 numbers = []
 encoding = []
+decimals = []
+
+propostional_var = []
+
 def build_cluase():
     pass
 # need to build cluases
 #
 
-
+def convter_base_nine(x,y,z):
+  return (x-1)*81 + (y-1)*9 + (z-1) + 1
 
 
 # program starts here
@@ -45,14 +50,30 @@ def main():
     i = 0
     j = 0
     # encode position of number into list
-    for x in numbers:
-        posx = i % 9
-        if posx == 0 and i != 0:
+    for k in numbers:
+        posy = i % 9
+        if posy == 0 and i != 0:
             j += 1
         i += 1
-        posy = j
-        encoding.append([posx , posy , x ])
-    print encoding
+        posx = j
+        encoding.append([posx , posy , k ])
+    # print encoding
+    d = 1
+    count = 0
+    for x in encoding:
+        if x[2] != 0:
+            decimals.append(d)
+            count += 1
+        else:
+            decimals.append(-d)
+        d += 1
+    print decimals
+
+    var_num = 81
+    cluase_num = 0
+    output = 'p cnf'
+
+
 
 
 
