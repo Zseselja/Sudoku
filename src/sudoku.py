@@ -4,8 +4,15 @@ import sys
 
 numbers = []
 encoding = []
+def build_cluase():
+    pass
+# need to build cluases
+#
 
 
+
+
+# program starts here
 def main():
     vars = 0;
     try:
@@ -15,33 +22,37 @@ def main():
         # print help information and exit:+
         print str(err) # will print something like "option -a not recognized"
 
-    # if ((vars[2] == "size:")
-    #     if(vars == type<int>)
 
+    #
+    # opening file with Sudoku number input inside
+    #
+    file = ''
 
+    try:
+        file = open(vars[0] , "r")
+    except IOError as err:
+         print 'cannot open file:' , vars[0], err
 
-
-    file = open(vars[0] , "r")
+    # parse file into ints
     for x in file:
         for i in x:
-            numbers.append(i)
+            numbers.append(int(i))
 
-
-    print numbers
-    num = 81
+    # right now we only want to take in input of 81 ints long
+    if len(numbers) != 81:
+        exit(0)
+    # print numbers
     i = 0
     j = 0
-
-
-
+    # encode position of number into list
     for x in numbers:
         posx = i % 9
-        if posx == 0:
+        if posx == 0 and i != 0:
             j += 1
         i += 1
         posy = j
         encoding.append([posx , posy , x ])
-
+    print encoding
 
 
 
@@ -52,8 +63,13 @@ def main():
 # 1 3 4 0
 # -1 2 0
 # -3 -4 0
-#
 
+# and
+
+
+# ( 1 3 4 )
+# ( -1 2 )
+# ( -3 -4 )
 
 
 
