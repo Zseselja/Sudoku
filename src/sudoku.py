@@ -13,13 +13,13 @@ def build_cluase():
 # need to build cluases
 #
 
-def convter_base_nine(x,y,z):
+def convert_base_nine(x,y,z):
   return (x-1)*81 + (y-1)*9 + (z-1) + 1
 
 
 # program starts here
 def main():
-    vars = 0;
+    vars = 0
     try:
         vars = sys.argv[1:]
     except IOError as err:
@@ -32,9 +32,10 @@ def main():
     # opening file with Sudoku number input inside
     #
     file = ''
-
+    out = ''
     try:
         file = open(vars[0] , "r")
+        out = open(vars[1] , "w")
     except IOError as err:
          print 'cannot open file:' , vars[0], err
 
@@ -47,27 +48,83 @@ def main():
     if len(numbers) != 81:
         exit(0)
     # print numbers
-    i = 0
-    j = 0
+    i = 0 # i is the row number
+    j = 0 # j is the col
     # encode position of number into list
     for k in numbers:
-        posy = i % 9
-        if posy == 0 and i != 0:
+        pos_y = i % 9
+        if pos_y == 0 and i != 0:
             j += 1
         i += 1
-        posx = j
-        encoding.append([posx , posy , k ])
-    # print encoding
+        pos_x = j
+        encoding.append([pos_x , pos_y , k ])
+    print encoding
     d = 1
     count = 0
-    for x in encoding:
-        if x[2] != 0:
-            decimals.append(d)
-            count += 1
-        else:
-            decimals.append(-d)
-        d += 1
-    print decimals
+
+    # Each number appears at most once in each row
+    for j in range(1, 10):
+        for k in range(1, 10):
+            for i in range(1 , 9):
+                for d in range( i + 1 , 10 ):
+                    out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(d, j , k)) + " 0\n" )
+                    count += 1
+
+    # Each number appears at most once in each col
+    for i in range(1, 10):
+        for k in range(1, 10):
+            for j in range(1 , 9):
+                for d in range( j + 1 , 10 ):
+                    out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
+                    count += 1
+
+    # Each number appears at most once in a 3x3 sub grid
+    for k in range(1, 10):
+        for cord_x in range(0 , 3):
+            for cord_y in range(0  ,3):
+                for i in range( 1 , 4 ):
+                    for j in range(1 , 4):
+
+                        for c in range(j+1, 4):
+                            pos_x = cord_x*3 + i
+                            pos_y1 = cord_y*3 + j
+                            pos_y2 = cord_y*3 + k
+                            pos_z = k
+                            out.write("-" + str(convert_base_nine(pos_x, pos_y1, pos_z)) + " -" + str(convert_base_nine(pos_x, pos_y2 ,pos_z)) + " 0\n")
+                            count += 1
+                            pass
+
+                        for c in range(i+1 , 4):
+                            pos_x = cord_x*3 + i
+                            pos_x2 = cord_x*3 + c
+                            pos_y1 = cord_y*3 + j
+                            pos_y2 = cord_y*3 + 1
+                            pos_z = k
+                            out.write("-" + str(convert_base_nine(pos_x, pos_y1, pos_z)) + " -" + str(convert_base_nine(pos_x2, pos_y2 ,pos_z)) + " 0\n")
+                            count += 1
+                            pass
+
+                    out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
+                    count += 1
+
+    # out.close()
+    # out = open(vars[1], "r")
+    #
+    # for x in out:
+    #     for i in x:
+    #         numbers.append(i)
+    #
+    # print max(numbers) ,
+    #
+    #
+    # for x in encoding:
+    #     if x[2] != 0:
+    #         decimals.append(d)
+    #         count += 1
+    #     else:
+    #         decimals.append(-d)
+    #     d += 1
+    # print decimals
 
     var_num = 81
     cluase_num = 0
