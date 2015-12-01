@@ -10,14 +10,15 @@ propostional_var = []
 
 def build_cluase():
     pass
-# need to build cluases
+# need to build clauses
 #
 
 def convert_base_nine(x,y,z):
   return (x-1)*81 + (y-1)*9 + (z-1) + 1
 
-
-# program starts here
+#---------------------------------------------
+# 				program starts here
+#---------------------------------------------
 def main():
     vars = 0
     try:
@@ -28,9 +29,9 @@ def main():
         print str(err) # will print something like "option -a not recognized"
 
 
-    #
+    #---------------------------------------------
     # opening file with Sudoku number input inside
-    #
+    #---------------------------------------------
     file = ''
     out = ''
     try:
@@ -61,8 +62,15 @@ def main():
     print encoding
     d = 1
     count = 0
-
-    # Each number appears at most once in each row
+	
+	# Rule 1: There is at least one number in each entry
+    for i in range(1,10):
+		for j in range(1,10):
+			for k in range(1,10):
+				out.write(str(convert_base_nine(i, j, k)) + " 0\n" )
+			count += 1
+			
+    # Rule 2: Each number appears at most once in each row
     for j in range(1, 10):
         for k in range(1, 10):
             for i in range(1 , 9):
@@ -70,7 +78,7 @@ def main():
                     out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(d, j , k)) + " 0\n" )
                     count += 1
 
-    # Each number appears at most once in each col
+    # Rule 3: Each number appears at most once in each col
     for i in range(1, 10):
         for k in range(1, 10):
             for j in range(1 , 9):
@@ -78,7 +86,7 @@ def main():
                     out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
                     count += 1
 
-    # Each number appears at most once in a 3x3 sub grid
+    # Rule 4: Each number appears at most once in a 3x3 sub grid
     for k in range(1, 10):
         for cord_x in range(0 , 3):
             for cord_y in range(0  ,3):
