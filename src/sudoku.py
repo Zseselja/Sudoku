@@ -34,48 +34,60 @@ def main():
     #---------------------------------------------
     file = ''
     out = ''
+    tempfile = 'output_temp.txt'
     try:
         file = open(vars[0] , "r")
         out = open(vars[1] , "w")
+        temp_out = open(tempfile , "w")
+        sudoku_puzzle_length = vars[2]
     except IOError as err:
          print 'cannot open file:' , vars[0], err
 
+
     # parse file into ints
-    for x in file:
+    for x in file.read(int(sudoku_puzzle_length)):
         for i in x:
             numbers.append(int(i))
 
     # right now we only want to take in input of 81 ints long
-    if len(numbers) != 81:
+    if len(numbers) != int(sudoku_puzzle_length):
         exit(0)
     # print numbers
     i = 0 # i is the row number
     j = 0 # j is the col
     # encode position of number into list
+    count = 0
+
+    #Rule to add in prefilled entry clauses
     for k in numbers:
-        pos_y = i % 9
+        pos_y = (i % 9)+1
         if pos_y == 0 and i != 0:
             j += 1
         i += 1
-        pos_x = j
+        pos_x = j+1
         encoding.append([pos_x , pos_y , k ])
+        if(k != 0):
+            pass
+
+            # temp_out.write(str(convert_base_nine(pos_x, pos_y, ( i ))) + " 0\n" )
+            # count += 1
+
+    d = 0
     print encoding
-    d = 1
-    count = 0
-	
+
 	# Rule 1: There is at least one number in each entry
     for i in range(1,10):
-		for j in range(1,10):
-			for k in range(1,10):
-				out.write(str(convert_base_nine(i, j, k)) + " 0\n" )
-			count += 1
-			
+        for j in range(1,10):
+            for k in range(1,10):
+                temp_out.write(str(convert_base_nine(i, j, k)) + ' ' )
+            temp_out.write('0\n')
+            count += 1
     # Rule 2: Each number appears at most once in each row
     for j in range(1, 10):
         for k in range(1, 10):
             for i in range(1 , 9):
                 for d in range( i + 1 , 10 ):
-                    out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(d, j , k)) + " 0\n" )
+                    temp_out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(d, j , k)) + " 0\n" )
                     count += 1
 
     # Rule 3: Each number appears at most once in each col
@@ -83,37 +95,39 @@ def main():
         for k in range(1, 10):
             for j in range(1 , 9):
                 for d in range( j + 1 , 10 ):
-                    out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
+                    temp_out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
                     count += 1
 
     # Rule 4: Each number appears at most once in a 3x3 sub grid
     for k in range(1, 10):
         for cord_x in range(0 , 3):
-            for cord_y in range(0  ,3):
-                for i in range( 1 , 4 ):
+            for cord_y in range(0 , 3):
+                for i in range( 1 , 4):
                     for j in range(1 , 4):
 
                         for c in range(j+1, 4):
                             pos_x = cord_x*3 + i
                             pos_y1 = cord_y*3 + j
-                            pos_y2 = cord_y*3 + k
-                            pos_z = k
-                            out.write("-" + str(convert_base_nine(pos_x, pos_y1, pos_z)) + " -" + str(convert_base_nine(pos_x, pos_y2 ,pos_z)) + " 0\n")
+                            pos_y2 = cord_y*3 + c
+                            temp_out.write("-" + str(convert_base_nine(pos_x, pos_y1, k)) + " -" + str(convert_base_nine(pos_x, pos_y2 ,k)) + " 0\n")
                             count += 1
-                            pass
 
                         for c in range(i+1 , 4):
-                            pos_x = cord_x*3 + i
-                            pos_x2 = cord_x*3 + c
-                            pos_y1 = cord_y*3 + j
-                            pos_y2 = cord_y*3 + 1
-                            pos_z = k
-                            out.write("-" + str(convert_base_nine(pos_x, pos_y1, pos_z)) + " -" + str(convert_base_nine(pos_x2, pos_y2 ,pos_z)) + " 0\n")
-                            count += 1
-                            pass
+                            for l in range(1,4):
+                                pos_x = cord_x*3 + i
+                                pos_x2 = cord_x*3 + c
+                                pos_y1 = cord_y*3 + j
+                                pos_y2 = cord_y*3 + l
+                                temp_out.write("-" + str(convert_base_nine(pos_x, pos_y1, k)) + " -" + str(convert_base_nine(pos_x2, pos_y2 ,k)) + " 0\n")
+                                count += 1
 
-                    out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
-                    count += 1
+    temp_out.close()
+    tempFile = 'output_temp.txt'
+    temp_out = open( tempFile , "r")
+    out.write("p cnf " +  str( len(numbers)*9) + " " + str(count) + " " + str(0) + "\n")
+    for x in temp_out:
+        out.write(x)
+
 
     # out.close()
     # out = open(vars[1], "r")
@@ -134,9 +148,9 @@ def main():
     #     d += 1
     # print decimals
 
-    var_num = 81
-    cluase_num = 0
-    output = 'p cnf'
+    # var_num = 81
+    # cluase_num = 0
+    # output = 'p cnf'
 
 
 
