@@ -124,7 +124,7 @@ def main():
     temp_out.close()
     tempFile = 'output_temp.txt'
     temp_out = open( tempFile , "r")
-    out.write("p cnf " +  str( len(numbers)*9) + " " + str(count) + " " + str(0) + "\n")
+    out.write("p cnf " +  str( len(numbers)*9) + " " + str(count)  + "\n")
     for x in temp_out:
         out.write(x)
 
