@@ -6,8 +6,8 @@ import math
 numbers = []
 encoding = []
 decimals = []
+dict = {'a' : 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18, 'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23, 'o': 24, 'p': 25, 'q': 26, 'r': 27, 's': 28, 't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 33}
 
-propostional_var = []
 
 def build_cluase():
     pass
@@ -55,7 +55,15 @@ def main():
             if i == '\n':
                 continue
             else:
-                numbers.append(int(i))
+                value = dict.get(i)
+                # print value
+                if value == None:
+                     numbers.append(int(i))
+                else:
+                    numbers.append(value)
+                # print i
+
+
 
     # right now we only want to take in input of 81 ints long
     if len(numbers) != int(sudoku_puzzle_length):
