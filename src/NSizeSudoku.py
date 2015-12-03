@@ -15,7 +15,7 @@ def build_cluase():
 #
 
 def convert_base_n(x,y,z, base):
-  return (x-1)*base*base + (y-1)*base + (z-1) + 1
+  return int((x-1)*base*base + (y-1)*base + (z-1) + 1)
 
 #---------------------------------------------
 # 				program starts here
@@ -45,15 +45,22 @@ def main():
          print 'cannot open file:' , vars[0], err
 
     # Find the size of each row/column/square
-    base = math.sqrt(sudoku_puzzle_length);
+
+
+    base = math.sqrt(float(sudoku_puzzle_length));
 
     # parse file into ints
     for x in file.read(int(sudoku_puzzle_length)):
         for i in x:
-            numbers.append(int(i))
+            if i == '\n':
+                continue
+            else:
+                numbers.append(int(i))
 
     # right now we only want to take in input of 81 ints long
     if len(numbers) != int(sudoku_puzzle_length):
+        print 'Didnt read right...'
+        print 'Make sure the \\n are out of the input'
         exit(0)
     # print numbers
     i = 0 # i is the row number
@@ -79,55 +86,55 @@ def main():
     print encoding
 
 	# Rule 1: There is at least one number in each entry
-    for i in range(1,base+1):
-        for j in range(1,base+1):
-            for k in range(1,base+1):
-                temp_out.write(str(convert_base_n(i, j, k, base)) + ' ' )
+    for i in range(1,int(base)+1):
+        for j in range(1,int(base)+1):
+            for k in range(1,int(base)+1):
+                temp_out.write(str(convert_base_n(i, j, k, int(base))) + ' ' )
             temp_out.write('0\n')
             count += 1
     # Rule 2: Each number appears at most once in each row
-    for j in range(1, base+1):
-        for k in range(1, base+1):
-            for i in range(1 , base):
-                for d in range( i + 1 , base+1 ):
-                    temp_out.write("-" + str(convert_base_n(i, j, k, base)) + " -" + str(convert_base_n(d, j , k, base)) + " 0\n" )
+    for j in range(1, int(base)+1):
+        for k in range(1, int(base)+1):
+            for i in range(1 , int(base)):
+                for d in range( i + 1 , int(base)+1 ):
+                    temp_out.write("-" + str(convert_base_n(i, j, k, int(base))) + " -" + str(convert_base_n(d, j , k, int(base) )) + " 0\n" )
                     count += 1
 
     # Rule 3: Each number appears at most once in each col
-    for i in range(1, base+1):
-        for k in range(1, base+1):
-            for j in range(1 , base):
-                for d in range( j + 1 , base+1 ):
-                    temp_out.write("-" + str(convert_base_n(i, j, k, base)) + " -" + str(convert_base_n(i, d , k, base)) + " 0\n" )
+    for i in range(1, int(base)+1):
+        for k in range(1, int(base)+1):
+            for j in range(1 , int(base)):
+                for d in range( j + 1 , int(base)+1 ):
+                    temp_out.write("-" + str(convert_base_n(i, j, k, int(base))) + " -" + str(convert_base_n(i, d , k, int(base))) + " 0\n" )
                     count += 1
 
     # Rule 4: Each number appears at most once in a 3x3 sub grid
-    for k in range(1, base+1):
-        for cord_x in range(0 , math.sqrt(base)):
-            for cord_y in range(0 , math.sqrt(base)):
-                for i in range( 1 , math.sqrt(base)+1):
-                    for j in range(1 , math.sqrt(base)+1):
+    for k in range(1, int(base)+1):
+        for cord_x in range(0 , int(math.sqrt(base))):
+            for cord_y in range(0 , int(math.sqrt(base))):
+                for i in range( 1 , int(math.sqrt(base))+1):
+                    for j in range(1 , int(math.sqrt(base))+1):
 
-                        for c in range(j+1, math.sqrt(base)+1):
-                            pos_x = cord_x*math.sqrt(base) + i
-                            pos_y1 = cord_y*math.sqrt(base) + j
-                            pos_y2 = cord_y*math.sqrt(base) + c
+                        for c in range(j+1, int(math.sqrt(base))+1):
+                            pos_x = cord_x*int(math.sqrt(base)) + i
+                            pos_y1 = cord_y*int(math.sqrt(base)) + j
+                            pos_y2 = cord_y*int(math.sqrt(base)) + c
                             temp_out.write("-" + str(convert_base_n(pos_x, pos_y1, k, base)) + " -" + str(convert_base_n(pos_x, pos_y2 ,k, base)) + " 0\n")
                             count += 1
 
-                        for c in range(i+1 , math.sqrt(base)+1):
-                            for l in range(1, math.sqrt(base)+1):
-                                pos_x = cord_x*math.sqrt(base) + i
-                                pos_x2 = cord_x*math.sqrt(base) + c
-                                pos_y1 = cord_y*math.sqrt(base) + j
-                                pos_y2 = cord_y*math.sqrt(base) + l
+                        for c in range(i+1 , int(math.sqrt(base))+1):
+                            for l in range(1, int(math.sqrt(base))+1):
+                                pos_x = cord_x*int(math.sqrt(base)) + i
+                                pos_x2 = cord_x*int(math.sqrt(base)) + c
+                                pos_y1 = cord_y*int(math.sqrt(base)) + j
+                                pos_y2 = cord_y*int(math.sqrt(base)) + l
                                 temp_out.write("-" + str(convert_base_n(pos_x, pos_y1, k, base)) + " -" + str(convert_base_n(pos_x2, pos_y2 ,k, base)) + " 0\n")
                                 count += 1
 
     temp_out.close()
     tempFile = 'output_temp.txt'
     temp_out = open( tempFile , "r")
-    out.write("p cnf " +  str( len(numbers)*base) + " " + str(count)  + "\n")
+    out.write("p cnf " +  str( int(len(numbers)*base)) + " " + str(count)  + "\n")
     for x in temp_out:
         out.write(x)
 
