@@ -1,4 +1,5 @@
 import sys
+import math
 # import getopt
 
 
@@ -34,7 +35,7 @@ def main():
     #---------------------------------------------
     file = ''
     out = ''
-    tempfile = 'output_temp.txt'
+    tempfile = 'nsize_output_temp.txt'
     try:
         file = open(vars[0] , "r")
         out = open(vars[1] , "w")
@@ -44,7 +45,7 @@ def main():
          print 'cannot open file:' , vars[0], err
 
     # Find the size of each row/column/square
-    base = sqrt(sudoku_puzzle_length);
+    base = math.sqrt(sudoku_puzzle_length);
 
     # parse file into ints
     for x in file.read(int(sudoku_puzzle_length)):
@@ -102,24 +103,24 @@ def main():
 
     # Rule 4: Each number appears at most once in a 3x3 sub grid
     for k in range(1, base+1):
-        for cord_x in range(0 , sqrt(base)):
-            for cord_y in range(0 , sqrt(base)):
-                for i in range( 1 , sqrt(base)+1):
-                    for j in range(1 , sqrt(base)+1):
+        for cord_x in range(0 , math.sqrt(base)):
+            for cord_y in range(0 , math.sqrt(base)):
+                for i in range( 1 , math.sqrt(base)+1):
+                    for j in range(1 , math.sqrt(base)+1):
 
-                        for c in range(j+1, sqrt(base)+1):
-                            pos_x = cord_x*sqrt(base) + i
-                            pos_y1 = cord_y*sqrt(base) + j
-                            pos_y2 = cord_y*sqrt(base) + c
+                        for c in range(j+1, math.sqrt(base)+1):
+                            pos_x = cord_x*math.sqrt(base) + i
+                            pos_y1 = cord_y*math.sqrt(base) + j
+                            pos_y2 = cord_y*math.sqrt(base) + c
                             temp_out.write("-" + str(convert_base_n(pos_x, pos_y1, k, base)) + " -" + str(convert_base_n(pos_x, pos_y2 ,k, base)) + " 0\n")
                             count += 1
 
-                        for c in range(i+1 , sqrt(base)+1):
-                            for l in range(1, sqrt(base)+1):
-                                pos_x = cord_x*sqrt(base) + i
-                                pos_x2 = cord_x*sqrt(base) + c
-                                pos_y1 = cord_y*sqrt(base) + j
-                                pos_y2 = cord_y*sqrt(base) + l
+                        for c in range(i+1 , math.sqrt(base)+1):
+                            for l in range(1, math.sqrt(base)+1):
+                                pos_x = cord_x*math.sqrt(base) + i
+                                pos_x2 = cord_x*math.sqrt(base) + c
+                                pos_y1 = cord_y*math.sqrt(base) + j
+                                pos_y2 = cord_y*math.sqrt(base) + l
                                 temp_out.write("-" + str(convert_base_n(pos_x, pos_y1, k, base)) + " -" + str(convert_base_n(pos_x2, pos_y2 ,k, base)) + " 0\n")
                                 count += 1
 
