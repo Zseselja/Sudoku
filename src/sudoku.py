@@ -17,7 +17,7 @@ def convert_base_nine(x,y,z):
   return (x-1)*81 + (y-1)*9 + (z-1) + 1
 
 #---------------------------------------------
-# 				program starts here
+# program starts here
 #---------------------------------------------
 def main():
     vars = 0
@@ -49,7 +49,7 @@ def main():
         for i in x:
             numbers.append(int(i))
 
-    # right now we only want to take in input of 81 ints long
+    # Check if the input length equals to user specified file length here
     if len(numbers) != int(sudoku_puzzle_length):
         exit(0)
     # print numbers
@@ -58,7 +58,7 @@ def main():
     # encode position of number into list
     count = 0
 
-    #Rule to add in prefilled entry clauses
+    #Rule 1: To add in prefilled entry clauses
     for k in numbers:
         pos_y = (i % 9)+1
         if pos_y == 0 and i != 0:
@@ -75,14 +75,15 @@ def main():
     d = 0
     print encoding
 
-	# Rule 1: There is at least one number in each entry
+	# Rule 2: There is at least one number in each entry
     for i in range(1,10):
         for j in range(1,10):
             for k in range(1,10):
                 temp_out.write(str(convert_base_nine(i, j, k)) + ' ' )
             temp_out.write('0\n')
             count += 1
-    # Rule 2: Each number appears at most once in each row
+            
+    # Rule 3: Each number appears at most once in each row
     for j in range(1, 10):
         for k in range(1, 10):
             for i in range(1 , 9):
@@ -90,7 +91,7 @@ def main():
                     temp_out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(d, j , k)) + " 0\n" )
                     count += 1
 
-    # Rule 3: Each number appears at most once in each col
+    # Rule 4: Each number appears at most once in each col
     for i in range(1, 10):
         for k in range(1, 10):
             for j in range(1 , 9):
@@ -98,7 +99,7 @@ def main():
                     temp_out.write("-" + str(convert_base_nine(i, j, k)) + " -" + str(convert_base_nine(i, d , k)) + " 0\n" )
                     count += 1
 
-    # Rule 4: Each number appears at most once in a 3x3 sub grid
+    # Rule 5: Each number appears at most once in a 3x3 sub grid
     for k in range(1, 10):
         for cord_x in range(0 , 3):
             for cord_y in range(0 , 3):
