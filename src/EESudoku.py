@@ -187,6 +187,11 @@ def main():
     timer = time.time()
     for x in temp_out:
         out.write(x)
+    out.close()
+
+    #Send to minisat
+    cmd = "./minisat.exe " + str(vars[1]) + " satoutput.txt"
+    os.system(cmd)
 
     #Send to minisat
     call([vars[3], "output.txt", "satoutput.txt"])
@@ -197,15 +202,6 @@ def main():
     satFile = open(satFile , 'r')
 
     solved = satFile.readline().strip()
-
-    #Format minisat output
-    for i in range(0, int(base)):
-        line = ''
-        for j in range(0, int(base)):
-            line = line + str( i ) + ',' + str(j) + ' '
-        final.write(line + '\n')
-        print line
-
 
     if solved == 'SAT':
         values = satFile.readline()
@@ -228,48 +224,6 @@ def main():
         pass
         # unsolved
 
-
-    # out.close()
-    # out = open(vars[1], "r")
-    #
-    # for x in out:
-    #     for i in x:
-    #         numbers.append(i)
-    #
-    # print max(numbers) ,
-    #
-    #
-    # for x in encoding:
-    #     if x[2] != 0:
-    #         decimals.append(d)
-    #         count += 1
-    #     else:
-    #         decimals.append(-d)
-    #     d += 1
-    # print decimals
-
-    # var_num = 81
-    # cluase_num = 0
-    # output = 'p cnf'
-
-
-
-
-
-# For example the CNF formula (x1 V x3 V x4) ^ (:x1 V x2) ^ (:x3 V :x4) would
-# be given by the following le:
-# c A sample file
-# p cnf 4 3
-# 1 3 4 0
-# -1 2 0
-# -3 -4 0
-
-# and
-
-
-# ( 1 3 4 )
-# ( -1 2 )
-# ( -3 -4 )
 
 
 
