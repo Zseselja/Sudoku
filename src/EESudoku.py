@@ -74,15 +74,15 @@ def main():
     count = 0
 
     #Rule to add in prefilled entry clauses
-    for k in numbers:
-        pos_y = (i % int(base))+1
-        if pos_y == 1 and i != 0:
-            j += 1
-        i += 1
-        pos_x = j+1
-        encoding.append([pos_x , pos_y , k ])
-        if(k != 0):
-            pass
+    #for k in numbers:
+       # pos_y = (i % int(base))+1
+       # if pos_y == 1 and i != 0:
+       #     j += 1
+       # i += 1
+       # pos_x = j+1
+       # encoding.append([pos_x , pos_y , k ])
+       # if(k != 0):
+       #     pass
 
             # temp_out.write(str(convert_base_n(pos_x, pos_y, ( i ), base)) + " 0\n" )
             # count += 1
@@ -168,15 +168,15 @@ def main():
             count += 1
             
     # Rule 8: Each number appears at least once in each 3x3 sub-grid
-    for z in range(1, int(base)+1):
-        for i in range(0, int(math.sqrt(base))):
-            for j in range(0, int(math.sqrt(base))):
-                for x in range(1, int(math.sqrt(base))+1):
-                    for y in range(1, int(math.sqrt(base))+1):
-                         temp_out.write(str(convert_base_n((3*i+x), (3*j+y), z, base)) + " 0\n")
-                        
+    for k in range(1,int(base)+1):
+        for d in range(0,int(math.sqrt(base))):
+            for l in range(0,int(math.sqrt(base))):
+                for i in range(1, int(math.sqrt(base))+1):
+                    for j in range(1, int(math.sqrt(base))+1):
+                        temp_out.write(str(convert_base_n(i, j, k, int(base))) + ' ' )
+		temp_out.write('0\n')
+		count += 1
     
-
     temp_out.close()
 
 
