@@ -156,29 +156,18 @@ def main():
     for x in temp_out:
         out.write(x)
     out.close()
-    #Send to minisat
-    # satFile = open("satoutput.txt" , "w")
 
-    # call([vars[3], "output.txt", "satoutput.txt"])
+    #Send to minisat
     cmd = "./minisat.exe " + str(vars[1]) + " satoutput.txt"
     os.system(cmd)
-    # print ret
 
+    # print ret
     satFile = "satoutput.txt"
     final = "resultsFile.txt"
     final = open( final , 'w')
     satFile = open(satFile , 'r')
 
     solved = satFile.readline().strip()
-
-    #Format minisat output
-    # for i in range(0, int(base)):
-    #     line = ''
-    #     for j in range(0, int(base)):
-    #         line = line + str( i ) + ',' + str(j) + ' '
-    #     final.write(line + '\n')
-    #     print line
-
 
     if solved == 'SAT':
         # print"here"
