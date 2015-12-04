@@ -1,7 +1,7 @@
 import sys
 import math
 import time
-from subprocess import call
+import os
 # import getopt
 
 
