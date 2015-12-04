@@ -1,12 +1,16 @@
 import sys
 import math
+import time
+from subprocess import call
 # import getopt
 
 
 numbers = []
 encoding = []
 decimals = []
-dict = {'a' : 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18, 'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23, 'o': 24, 'p': 25, 'q': 26, 'r': 27, 's': 28, 't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 33}
+dict = {'a' : 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18,
+        'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23, 'o': 24, 'p': 25, 'q': 26, 'r': 27, 's': 28,
+        't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 33}
 
 
 def build_cluase():
@@ -78,8 +82,8 @@ def main():
 
     #Rule to add in prefilled entry clauses
     for k in numbers:
-        pos_y = (i % base)+1
-        if pos_y == 0 and i != 0:
+        pos_y = (i % int(base))+1
+        if pos_y == 1 and i != 0:
             j += 1
         i += 1
         pos_x = j+1
@@ -91,7 +95,7 @@ def main():
             # count += 1
 
     d = 0
-    print encoding
+    # print encoding
 
 	# Rule 1: There is at least one number in each entry
     for i in range(1,int(base)+1):
@@ -140,11 +144,55 @@ def main():
                                 count += 1
 
     temp_out.close()
-    tempFile = 'output_temp.txt'
-    temp_out = open( tempFile , "r")
+
+
+    temp_out = open( tempfile , "r")
+    # print base
     out.write("p cnf " +  str( int(len(numbers)*base)) + " " + str(count)  + "\n")
+
+    timer = time.time()
     for x in temp_out:
         out.write(x)
+
+    #Send to minisat
+    call([vars[3], "output.txt", "satoutput.txt"])
+
+    satFile = "satoutput.txt"
+    final = "resultsFile.txt"
+    final = open( final , 'w')
+    satFile = open(satFile , 'r')
+
+    solved = satFile.readline().strip()
+
+    #Format minisat output
+    for i in range(0, int(base)):
+        line = ''
+        for j in range(0, int(base)):
+            line = line + str( i ) + ',' + str(j) + ' '
+        final.write(line + '\n')
+        print line
+
+
+    if solved == 'SAT':
+        values = satFile.readline()
+        split_values = values.split(' ')
+        for a in range((len(split_values))):
+            split_values[a] = int(split_values[a])
+        final.write("Solved Puzzle: \n")
+
+        for x in range(0 , int(base)):
+            line = ''
+            for y in range(0 , int(base)):
+                for z in range( 0 , int(base)):
+                    if(split_values[x*(int(base*base)) + int(base)*y + z] >= 0):
+                        line = line + str(z+1) + ' '
+                        break
+            print(line + '\n')
+            final.write(line + '\n')
+    else:
+        exit(0)
+        pass
+        # unsolved
 
 
     # out.close()
