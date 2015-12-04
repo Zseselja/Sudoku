@@ -146,7 +146,7 @@ def main():
     for i in range(1, int(base)+1):
         for j in range(1, int(base)+1):
             for k in range(1 , int(base)):
-                for d = k+1 in range( i + 1 , int(base)+1 ):
+                for d in range( k + 1 , int(base)+1 ):
                     temp_out.write("-" + str(convert_base_n(i, j, k, int(base))) + " -" + str(convert_base_n(i, j , d, int(base) )) + " 0\n" )
                     count += 1
                     
