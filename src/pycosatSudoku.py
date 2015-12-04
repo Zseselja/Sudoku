@@ -1,12 +1,11 @@
 import sys
 import math
 import time
-import os
-
 from subprocess import call
+import pycosat
 # import getopt
 
-
+pycoList = []
 numbers = []
 encoding = []
 decimals = []
@@ -155,15 +154,22 @@ def main():
     timer = time.time()
     for x in temp_out:
         out.write(x)
-    out.close()
-    #Send to minisat
-    # satFile = open("satoutput.txt" , "w")
 
-    # call([vars[3], "output.txt", "satoutput.txt"])
-    cmd = "./minisat.exe " + str(vars[1]) + " satoutput.txt"
-    os.system(cmd)
-    # print ret
-
+    # #Send to minisat
+    # if vars[3] == './minisat.exe':
+    #     call([vars[3], "output.txt", "satoutput.txt"])
+    # # else use pycosat
+    # else:
+    #     # print "in else"
+    #     f = open("output.txt" , 'r')
+    #     sublist = [1]
+    #     pcnfValues = f.readline()
+    #     for clause in f:
+    #         sublist[0] =  clause.strip('0\n')
+    #
+    #         pycoList.append(sublist[:])
+    #     print pycoList
+    #     pass
     satFile = "satoutput.txt"
     final = "resultsFile.txt"
     final = open( final , 'w')
@@ -176,12 +182,11 @@ def main():
     #     line = ''
     #     for j in range(0, int(base)):
     #         line = line + str( i ) + ',' + str(j) + ' '
-    #     final.write(line + '\n')
+    #     # final.write(line + '\n')
     #     print line
 
 
     if solved == 'SAT':
-        # print"here"
         values = satFile.readline()
         split_values = values.split(' ')
         for a in range((len(split_values))):
@@ -195,12 +200,56 @@ def main():
                     if(split_values[x*(int(base*base)) + int(base)*y + z] >= 0):
                         line = line + str(z+1) + ' '
                         break
-            # print(line + '\n')
+            print(line + '\n')
             final.write(line + '\n')
     else:
         exit(0)
         pass
         # unsolved
+
+
+    # out.close()
+    # out = open(vars[1], "r")
+    #
+    # for x in out:
+    #     for i in x:
+    #         numbers.append(i)
+    #
+    # print max(numbers) ,
+    #
+    #
+    # for x in encoding:
+    #     if x[2] != 0:
+    #         decimals.append(d)
+    #         count += 1
+    #     else:
+    #         decimals.append(-d)
+    #     d += 1
+    # print decimals
+
+    # var_num = 81
+    # cluase_num = 0
+    # output = 'p cnf'
+
+
+
+
+
+# For example the CNF formula (x1 V x3 V x4) ^ (:x1 V x2) ^ (:x3 V :x4) would
+# be given by the following le:
+# c A sample file
+# p cnf 4 3
+# 1 3 4 0
+# -1 2 0
+# -3 -4 0
+
+# and
+
+
+# ( 1 3 4 )
+# ( -1 2 )
+# ( -3 -4 )
+
 
 
 if __name__ == '__main__':
