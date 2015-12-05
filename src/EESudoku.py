@@ -194,7 +194,7 @@ def main():
     os.system(cmd)
 
     #Send to minisat
-    call([vars[3], "output.txt", "satoutput.txt"])
+    # call([vars[3], "output.txt", "satoutput.txt"])
 
     satFile = "satoutput.txt"
     final = "resultsFile.txt"
@@ -217,7 +217,7 @@ def main():
                     if(split_values[x*(int(base*base)) + int(base)*y + z] >= 0):
                         line = line + str(z+1) + ' '
                         break
-            print(line + '\n')
+            # print(line + '\n')
             final.write(line + '\n')
     else:
         exit(0)

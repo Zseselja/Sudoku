@@ -1,9 +1,9 @@
 import sys
 import math
 import time
-from subprocess import call
+import os
 import pycosat
-# import getopt
+
 
 pycoList = []
 numbers = []
@@ -40,11 +40,11 @@ def main():
     #---------------------------------------------
     file = ''
     out = ''
-    tempfile = 'nsize_output_temp.txt'
+    # tempfile = 'nsize_output_temp.txt'
     try:
         file = open(vars[0] , "r")
         out = open(vars[1] , "w")
-        temp_out = open(tempfile , "w")
+        # temp_out = open(tempfile , "w")
         sudoku_puzzle_length = vars[2]
     except IOError as err:
          print 'cannot open file:' , vars[0], err
@@ -52,8 +52,8 @@ def main():
     # Find the size of each row/column/square
 
 
-    base = math.sqrt(float(sudoku_puzzle_length));
-
+    base = math.sqrt(float(sudoku_puzzle_length))
+    base = int(base)
     # parse file into ints
     for x in file.read(int(sudoku_puzzle_length)):
         for i in x:
@@ -100,26 +100,33 @@ def main():
 
 	# Rule 1: There is at least one number in each entry
     for i in range(1,int(base)+1):
+        # sublist = []
         for j in range(1,int(base)+1):
+            sublist = []
             for k in range(1,int(base)+1):
-                temp_out.write(str(convert_base_n(i, j, k, int(base))) + ' ' )
-            temp_out.write('0\n')
+                sublist.append(convert_base_n(i, j, k, int(base)))
+            pycoList.append(sublist)
             count += 1
     # Rule 2: Each number appears at most once in each row
     for j in range(1, int(base)+1):
         for k in range(1, int(base)+1):
             for i in range(1 , int(base)):
                 for d in range( i + 1 , int(base)+1 ):
-                    temp_out.write("-" + str(convert_base_n(i, j, k, int(base))) + " -" + str(convert_base_n(d, j , k, int(base) )) + " 0\n" )
-                    count += 1
+                    sublist = []
+                    sublist.append(-1*convert_base_n(i, j, k, int(base)))
+                    sublist.append(-1*convert_base_n(d, j, k, int(base)))
+                    pycoList.append(sublist)
 
     # Rule 3: Each number appears at most once in each col
     for i in range(1, int(base)+1):
         for k in range(1, int(base)+1):
             for j in range(1 , int(base)):
                 for d in range( j + 1 , int(base)+1 ):
-                    temp_out.write("-" + str(convert_base_n(i, j, k, int(base))) + " -" + str(convert_base_n(i, d , k, int(base))) + " 0\n" )
-                    count += 1
+                    sublist = []
+                    sublist.append(-1*convert_base_n(i, j, k, int(base)))
+                    sublist.append(-1*convert_base_n(i, d, k, int(base)))
+                    pycoList.append(sublist)
+
 
     # Rule 4: Each number appears at most once in a 3x3 sub grid
     for k in range(1, int(base)+1):
@@ -132,8 +139,10 @@ def main():
                             pos_x = cord_x*int(math.sqrt(base)) + i
                             pos_y1 = cord_y*int(math.sqrt(base)) + j
                             pos_y2 = cord_y*int(math.sqrt(base)) + c
-                            temp_out.write("-" + str(convert_base_n(pos_x, pos_y1, k, base)) + " -" + str(convert_base_n(pos_x, pos_y2 ,k, base)) + " 0\n")
-                            count += 1
+                            sublist = []
+                            sublist.append(-1*convert_base_n(pos_x, pos_y1, k, base))
+                            sublist.append(-1*convert_base_n(pos_x, pos_y2 ,k, base))
+                            pycoList.append(sublist)
 
                         for c in range(i+1 , int(math.sqrt(base))+1):
                             for l in range(1, int(math.sqrt(base))+1):
@@ -141,114 +150,49 @@ def main():
                                 pos_x2 = cord_x*int(math.sqrt(base)) + c
                                 pos_y1 = cord_y*int(math.sqrt(base)) + j
                                 pos_y2 = cord_y*int(math.sqrt(base)) + l
-                                temp_out.write("-" + str(convert_base_n(pos_x, pos_y1, k, base)) + " -" + str(convert_base_n(pos_x2, pos_y2 ,k, base)) + " 0\n")
-                                count += 1
+                                sublist = []
+                                sublist.append(-1*convert_base_n(pos_x, pos_y1, k, base))
+                                sublist.append(-1*convert_base_n(pos_x2, pos_y2 ,k, base))
+                                pycoList.append(sublist)
 
-    temp_out.close()
+    # print pycoList
+    pycoReturn = pycosat.solve(pycoList)
 
-
-    temp_out = open( tempfile , "r")
-    # print base
-    out.write("p cnf " +  str( int(len(numbers)*base)) + " " + str(count)  + "\n")
-
-    timer = time.time()
-    for x in temp_out:
-        out.write(x)
-
-    # #Send to minisat
-    # if vars[3] == './minisat.exe':
-    #     call([vars[3], "output.txt", "satoutput.txt"])
-    # # else use pycosat
-    # else:
-    #     # print "in else"
-    #     f = open("output.txt" , 'r')
-    #     sublist = [1]
-    #     pcnfValues = f.readline()
-    #     for clause in f:
-    #         sublist[0] =  clause.strip('0\n')
-    #
-    #         pycoList.append(sublist[:])
-    #     print pycoList
-    #     pass
-    satFile = "satoutput.txt"
     final = "resultsFile.txt"
     final = open( final , 'w')
-    satFile = open(satFile , 'r')
-
-    solved = satFile.readline().strip()
-
-    #Format minisat output
-    # for i in range(0, int(base)):
-    #     line = ''
-    #     for j in range(0, int(base)):
-    #         line = line + str( i ) + ',' + str(j) + ' '
-    #     # final.write(line + '\n')
-    #     print line
-
-
-    if solved == 'SAT':
-        values = satFile.readline()
-        split_values = values.split(' ')
-        for a in range((len(split_values))):
-            split_values[a] = int(split_values[a])
-        final.write("Solved Puzzle: \n")
-
-        for x in range(0 , int(base)):
-            line = ''
-            for y in range(0 , int(base)):
-                for z in range( 0 , int(base)):
-                    if(split_values[x*(int(base*base)) + int(base)*y + z] >= 0):
-                        line = line + str(z+1) + ' '
-                        break
-            print(line + '\n')
-            final.write(line + '\n')
-    else:
-        exit(0)
-        pass
-        # unsolved
-
-
-    # out.close()
-    # out = open(vars[1], "r")
+    # satFile = open(satFile , 'r')
     #
-    # for x in out:
-    #     for i in x:
-    #         numbers.append(i)
-    #
-    # print max(numbers) ,
+    # solved = satFile.readline().strip()
     #
     #
-    # for x in encoding:
-    #     if x[2] != 0:
-    #         decimals.append(d)
-    #         count += 1
-    #     else:
-    #         decimals.append(-d)
-    #     d += 1
-    # print decimals
 
-    # var_num = 81
-    # cluase_num = 0
-    # output = 'p cnf'
+    # if solved == 'SAT':
+    values = ''
+    i = 0
+    for k in pycoReturn:
+        i += 1
+        if (i != len(pycoReturn)): values = values + str(k) + ' '
+        else : values = values + str(k)
+    # values = ''.join(str(k) for k in pycoReturn)
+    print values
+    split_values = values.split(' ')
+    print split_values
+    for a in range((len(split_values))):
+        split_values[a] = int(split_values[a])
+    final.write("Solved Puzzle: \n")
+    for x in range(0 , int(base)):
+        line = ''
+        for y in range(0 , int(base)):
+            for z in range( 0 , int(base)):
+                 if(split_values[x*(int(base*base)) + int(base)*y + z] >= 0):
+                     line = line + str(z+1) + ' '
+                     break
+        print(line + '\n')
+        final.write(line + '\n')
+
+    exit(0)
 
 
-
-
-
-# For example the CNF formula (x1 V x3 V x4) ^ (:x1 V x2) ^ (:x3 V :x4) would
-# be given by the following le:
-# c A sample file
-# p cnf 4 3
-# 1 3 4 0
-# -1 2 0
-# -3 -4 0
-
-# and
-
-
-# ( 1 3 4 )
-# ( -1 2 )
-# ( -3 -4 )
 
 
 
