@@ -12,7 +12,7 @@ encoding = []
 decimals = []
 dict = {'a' : 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18,
         'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23, 'o': 24, 'p': 25, 'q': 26, 'r': 27, 's': 28,
-        't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 33}
+        't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 35}
 
 
 def build_cluase():
@@ -99,7 +99,7 @@ def main():
 
 
     d = 0
-    print encoding
+    # print encoding
 
 	# Rule 1: There is at least one number in each entry
     for i in range(1,int(base)+1):
@@ -160,7 +160,7 @@ def main():
     out.close()
 
     #Send to minisat
-    cmd = "./minisat.exe " + str(vars[1]) + " satoutput.txt"
+    cmd = str(vars[3]) + ' ' + str(vars[1]) + " satoutput.txt"
     os.system(cmd)
 
     # print ret
