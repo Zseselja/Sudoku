@@ -74,18 +74,17 @@ def main():
     count = 0
 
     #Rule to add in prefilled entry clauses
-    #for k in numbers:
-       # pos_y = (i % int(base))+1
-       # if pos_y == 1 and i != 0:
-       #     j += 1
-       # i += 1
-       # pos_x = j+1
-       # encoding.append([pos_x , pos_y , k ])
-       # if(k != 0):
-       #     pass
-
-            # temp_out.write(str(convert_base_n(pos_x, pos_y, ( i ), base)) + " 0\n" )
-            # count += 1
+    for k in numbers:
+       pos_y = (i % int(base))+1
+       if pos_y == 1 and i != 0:
+           j += 1
+       i += 1
+       pos_x = j+1
+       encoding.append([pos_x , pos_y , k ])
+       if(k != 0):
+           pass
+           temp_out.write(str(convert_base_n(pos_x, pos_y, ( k ), base)) + " 0\n" )
+           count += 1
 
     d = 0
 

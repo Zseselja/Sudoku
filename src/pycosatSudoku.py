@@ -82,7 +82,9 @@ def main():
     count = 0
 
     #Rule to add in prefilled entry clauses
+
     for k in numbers:
+        sublist = []
         pos_y = (i % int(base))+1
         if pos_y == 1 and i != 0:
             j += 1
@@ -91,10 +93,12 @@ def main():
         encoding.append([pos_x , pos_y , k ])
         if(k != 0):
             pass
-
+            sublist.append(convert_base_n(pos_x, pos_y, int(k), base))
+            pycoList.append(sublist)
             # temp_out.write(str(convert_base_n(pos_x, pos_y, ( i ), base)) + " 0\n" )
             # count += 1
 
+    # print pycoList
     d = 0
     # print encoding
 
@@ -174,9 +178,9 @@ def main():
         if (i != len(pycoReturn)): values = values + str(k) + ' '
         else : values = values + str(k)
     # values = ''.join(str(k) for k in pycoReturn)
-    print values
+    # print values
     split_values = values.split(' ')
-    print split_values
+    # print split_values
     for a in range((len(split_values))):
         split_values[a] = int(split_values[a])
     final.write("Solved Puzzle: \n")
@@ -187,7 +191,7 @@ def main():
                  if(split_values[x*(int(base*base)) + int(base)*y + z] >= 0):
                      line = line + str(z+1) + ' '
                      break
-        print(line + '\n')
+        # print(line + '\n')
         final.write(line + '\n')
 
     exit(0)

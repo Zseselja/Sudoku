@@ -82,7 +82,7 @@ def main():
     # encode position of number into list
     count = 0
 
-   
+
     #Rule to add in prefilled entry clauses
     for k in numbers:
         pos_y = (i % int(base))+1
@@ -94,12 +94,12 @@ def main():
         if(k != 0):
             pass
 
-            # temp_out.write(str(convert_base_n(pos_x, pos_y, ( i ), base)) + " 0\n" )
-            # count += 1
+            temp_out.write(str(convert_base_n(pos_x, pos_y, ( k ), base)) + " 0\n" )
+            count += 1
 
 
     d = 0
-    # print encoding
+    print encoding
 
 	# Rule 1: There is at least one number in each entry
     for i in range(1,int(base)+1):
